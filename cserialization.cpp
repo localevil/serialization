@@ -48,7 +48,7 @@ void CSerialization::deserialization(const std::string &PASSED_FILE)
     fseek(file,0L,SEEK_END);
     length = ftell(file);
     fseek(file,0L,SEEK_SET);
-    data =std::make_unique<char>(length);
+    data = std::make_unique<char>(length);
     fread(&data,sizeof(char), length, file);
     fclose(file);
 

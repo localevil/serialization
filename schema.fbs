@@ -1,4 +1,4 @@
-//С
+//Тестовая схема
 namespace TestSchema;
 
 enum type_of_schema {type1, type2, type3}
@@ -7,6 +7,7 @@ table TestStruct {
     name:string;
     id:int;
     key:int;
+    type:type_of_schema = type1;
 }
 
 root_type TestStruct;
