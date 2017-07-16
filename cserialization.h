@@ -1,5 +1,6 @@
 #include <schema_generated.h>
 #include <iostream>
+#include <variant>
 
 #ifndef CSERIALIZATION_H
 #define CSERIALIZATION_H
@@ -11,20 +12,8 @@ class CSerialization
 public:
     CSerialization();
     ~CSerialization();
-    bool serialization(const std::string &PASSED_FILE, std::string passed_name, int passed_id, int passed_key);
-    void deserialization(const std::string &PASSED_FILE);
-
-
-private:
-    int size_of_builder;
-    int one_struct_id;
-    int one_struct_key;
-    int length;
-    FILE* file;
-    uint8_t *buffer;
-    std::unique_ptr<char> data;
-    //std::vector<std::variant<std::string, int>> conteier;
-    std::unique_ptr<flatbuffers::FlatBufferBuilder> builder;
+    bool serialization(const std::string_view passed_file,const std::string_view passed_name,const int &passed_id,const int &passed_key);
+    static std::vector<std::variant<std::string, int>> deserialization(const std::string_view passed_file);
 };
 
 #endif // CSERIALIZATION_H
