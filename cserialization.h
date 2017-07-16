@@ -23,7 +23,7 @@ private:
     FILE* file;
     uint8_t *buffer;
     std::unique_ptr<char> data;
-    std::vector<std::variant<std::string, int>> conteier;
+    //std::vector<std::variant<std::string, int>> conteier;
     std::unique_ptr<flatbuffers::FlatBufferBuilder> builder;
 };
 

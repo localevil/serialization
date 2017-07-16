@@ -56,11 +56,15 @@ void CSerialization::deserialization(const std::string &PASSED_FILE)
     auto take = GetTestStruct(&data);
 
     //Вывод значений в консоль(можно использовать только printf())
-    conteier.push_back(take->name.c_str());
+    /*conteier.push_back(take->name.c_str());
     conteier.push_back(take->id());
     conteier.push_back(take->key());
     for(int i =0; i < conteier.size(); i++)
     {
         std::cout << conteier[i] << std::endl;
-    }
+    }*/
+
+    printf("%s", take->name()->c_str());
+    printf("%d", take->id());
+    printf("%d", take->key());
 }
