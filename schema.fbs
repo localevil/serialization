@@ -1,0 +1,12 @@
+//С
+namespace TestSchema;
+
+enum type_of_schema {type1, type2, type3}
+
+table TestStruct {
+    name:string;
+    id:int;
+    key:int;
+}
+
+root_type TestStruct;
