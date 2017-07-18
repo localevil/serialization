@@ -1,9 +1,8 @@
 //Тестовая схема
 namespace TestSchema;
 
-enum type_of_schema {type1, type2, type3}
-
-table TestStruct {
+table TestStruct
+{
     name:string;
     id:int;
     key:int;

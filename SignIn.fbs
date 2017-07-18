@@ -1,0 +1,11 @@
+//Схема входа
+namespace Schema;
+
+table SignIn
+{
+    type:short; //Тип схемы
+    login:string;
+    password:string;
+}
+
+root_type SignIn;

@@ -7,7 +7,11 @@ SOURCES += main.cpp \
     cserialization.cpp
 
 DISTFILES += \
-    schema.fbs
+    schema.fbs \
+    Registration.fbs \
+    SignIn.fbs \
+    Profile.fbs \
+    Error.fbs
 
 HEADERS += \
     schema_generated.h \
@@ -35,4 +39,8 @@ HEADERS += \
     flatbuffers/reflection_generated.h \
     flatbuffers/registry.h \
     flatbuffers/util.h \
-    cserialization.h
+    cserialization.h \
+    Error_generated.h \
+    Profile_generated.h \
+    Registration_generated.h \
+    SignIn_generated.h

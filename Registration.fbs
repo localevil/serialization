@@ -1,0 +1,15 @@
+//Схема регестрации
+namespace Schema;
+
+table Registration
+{
+    type:short; //Тип схемы
+    login:string;
+    password:string;
+    name:string;
+    surname:string; //Фамилия
+    sex:bool;
+    date_of_birth:string;
+}
+
+root_type Registration;

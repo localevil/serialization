@@ -1,0 +1,12 @@
+//Схема ошибки
+namespace Schema;
+
+table Error
+{
+    type:short; //Тип схемы
+    key:string;
+    code:short; //Код ошибки
+    description:string; //Описание
+}
+
+root_type Error;
