@@ -10,6 +10,13 @@ CSerialization::~CSerialization()
 
 }
 
+enum type{
+    Registration=0,
+    SingIn,
+    Profile,
+    Error
+};
+
 bool CSerialization::serialization(const std::string &PASSED_FILE, std::string passed_name, int passed_id, int passed_key)
 {
     //Создание и присваивание значений элементов структуры из schema_generated.h
