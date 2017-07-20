@@ -18,7 +18,7 @@ enum type{
     ERROR
 };
 
-bool CSerialization::serialization(const std::string &PASSED_FILE, std::string passed_login, std::string passed_password,
+bool CSerialization::serialization(const std::string &passed_file, std::string passed_login, std::string passed_password,
                                    std::string passed_name, std::string passed_surname, bool passed_sex,
                                    std::string passed_data_of_birth) //Регистрация
 {
@@ -38,11 +38,11 @@ bool CSerialization::serialization(const std::string &PASSED_FILE, std::string p
     //Завершение построения структуры
     builder->Finish(strc);
 
-    save_to_file(PASSED_FILE);
+    save_to_file(passed_file);
 
     return true;
 }
-bool CSerialization::serialization(const std::string &PASSED_FILE, const std::string &passed_login, const std::string &passed_password) // Вход
+bool CSerialization::serialization(const std::string &passed_file, const std::string &passed_login, const std::string &passed_password) // Вход
 {
     auto struct_login = builder->CreateString(passed_login);
     auto struct_password = builder->CreateString(passed_password);
@@ -53,12 +53,12 @@ bool CSerialization::serialization(const std::string &PASSED_FILE, const std::st
     //Завершение построения структуры
     builder->Finish(strc);
 
-    save_to_file(PASSED_FILE);
+    save_to_file(passed_file);
 
     return true;
 }
 
-bool CSerialization::serialization(const std::string &PASSED_FILE, const std::string &passed_key, const std::string &passed_name,
+bool CSerialization::serialization(const std::string &passed_file, const std::string &passed_key, const std::string &passed_name,
                                   const std::string &passed_surname, const bool &passed_sex, const std::string &passed_data_of_birth) // Профиль
 {
     auto struct_key = builder->CreateString(passed_key);
@@ -73,11 +73,11 @@ bool CSerialization::serialization(const std::string &PASSED_FILE, const std::st
     //Завершение построения структуры
     builder->Finish(strc);
 
-    save_to_file(PASSED_FILE);
+    save_to_file(passed_file);
     return true;
 }
 
-bool CSerialization::serialization(const std::string &PASSED_FILE, const std::string &passed_key, const unsigned long &passed_user_addressee_id,
+bool CSerialization::serialization(const std::string &passed_file, const std::string &passed_key, const unsigned long &passed_user_addressee_id,
                                    const unsigned long &passed_user_sender_id, const std::string &passed_message,
                                    const std::string &passed_data_time) // Сообщение
 {
@@ -93,13 +93,13 @@ bool CSerialization::serialization(const std::string &PASSED_FILE, const std::st
     //Завершение построения структуры
     builder->Finish(strc);
 
-    save_to_file(PASSED_FILE);
+    save_to_file(passed_file);
 
     return true;
 }
 
 
-bool CSerialization::serialization(const std::string &PASSED_FILE, const std::string &passed_key, const int16_t &passed_code, const std::string &passed_discriprion) // Ошибка
+bool CSerialization::serialization(const std::string &passed_file, const std::string &passed_key, const int16_t &passed_code, const std::string &passed_discriprion) // Ошибка
 {
     auto struct_key = builder->CreateString(passed_key);
     int16_t struct_code = passed_code;
@@ -111,36 +111,38 @@ bool CSerialization::serialization(const std::string &PASSED_FILE, const std::st
     //Завершение построения структуры
     builder->Finish(strc);
 
-    save_to_file(PASSED_FILE);
+    save_to_file(passed_file);
 
     return true;
 }
 
-void CSerialization::save_to_file(const std::string &PASSED_FILE)
+void CSerialization::save_to_file(const std::string &passed_file)
 {
     //Присваевание указателя билдера
     uint8_t *buffer = builder->GetBufferPointer();
-
-    if(!buffer)
-    {
-        std::cout << "Пустой буффер" << std::endl;
-    }
 
     //Размер билдера
     size_t size_of_builder = builder->GetSize();
 
     //Запись
-    FILE *file = fopen(PASSED_FILE.c_str(), "wb");
-
+    FILE *file = fopen(passed_file.c_str(), "wb");
     fseek(file,0L,SEEK_END);
     fwrite(buffer, sizeof(char), size_of_builder , file);
     fclose(file);
 }
 
-void CSerialization::deserialization(const std::string &PASSED_FILE)
+void CSerialization::deserialization(const std::string &passed_file)
 {
+    std::cout << "-------------------------" <<  std::endl;
     // Открываем файл в режиме чтения
-    FILE *file = fopen(PASSED_FILE.c_str(), "rb");
+    FILE *file = fopen(passed_file.c_str(), "rb");
+
+    if(file == nullptr) //Проверка файл
+    {
+        std::cout << "File error: " << passed_file << std::endl;
+        return ;
+    }
+
     fseek(file,0L,SEEK_END);
     size_t length = ftell(file);
     fseek(file,0L,SEEK_SET);
@@ -193,47 +195,46 @@ void CSerialization::deserialization(const std::string &PASSED_FILE)
 //        printf("%s\n", take->message()->c_str());
 //        break;
 //    case 4:
-
 //        break;
 //    default:
 //        break;
 //    }
     if(for_type->type() == 0)
     {
-                //Десериализация файла
-                auto take = GetRegistration(data.get());
-                printf("%s\n", take->login()->c_str());
-                printf("%s\n", take->password()->c_str());
-                printf("%s\n", take->name()->c_str());
-                printf("%s\n", take->surname()->c_str());
-                printf("%s\n", take->sex() ? "true" : "false");
-                printf("%s\n", take->date_of_birth()->c_str());
+        //Десериализация файла
+        auto take = GetRegistration(data.get());
+        printf("%s\n", take->login()->c_str());
+        printf("%s\n", take->password()->c_str());
+        printf("%s\n", take->name()->c_str());
+        printf("%s\n", take->surname()->c_str());
+        printf("%s\n", take->sex() ? "true" : "false");
+        printf("%s\n", take->date_of_birth()->c_str());
     }
     else if(for_type->type() == 1)
     {
-                //Десериализация файла
-                auto take = GetSignIn(data.get());
-                printf("%s\n", take->login()->c_str());
-                printf("%s\n", take->password()->c_str());
+        //Десериализация файла
+        auto take = GetSignIn(data.get());
+        printf("%s\n", take->login()->c_str());
+        printf("%s\n", take->password()->c_str());
     }
     else if(for_type->type() == 2)
     {
-                //Десериализация файла
-                auto take = GetProfile(data.get());
-                printf("%s\n", take->key()->c_str());
-                printf("%s\n", take->name()->c_str());
-                printf("%s\n", take->surname()->c_str());
-                printf("%s\n", take->sex() ? "true" : "false");
-                printf("%s\n", take->data_of_birth()->c_str());
+        //Десериализация файла
+        auto take = GetProfile(data.get());
+        printf("%s\n", take->key()->c_str());
+        printf("%s\n", take->name()->c_str());
+        printf("%s\n", take->surname()->c_str());
+        printf("%s\n", take->sex() ? "true" : "false");
+        printf("%s\n", take->data_of_birth()->c_str());
     }
     else if(for_type->type() == 3)
     {
-                //Десериализация файла
-                auto take = GetMessage(data.get());
-                printf("%s\n", take->key()->c_str());
-                printf("%llu\n", take->user_addressee_id());
-                printf("%llu\n", take->user_sender_id());
-                printf("%s\n", take->message()->c_str());
+        //Десериализация файла
+        auto take = GetMessage(data.get());
+        printf("%s\n", take->key()->c_str());
+        printf("%llu\n", take->user_addressee_id());
+        printf("%llu\n", take->user_sender_id());
+        printf("%s\n", take->message()->c_str());
     }
     else if(for_type->type() == 4)
     {
@@ -244,6 +245,4 @@ void CSerialization::deserialization(const std::string &PASSED_FILE)
         printf("%s\n", take->description()->c_str());
 
     }
-    std::cout << "-------------------------" <<  std::endl;
-
 }
