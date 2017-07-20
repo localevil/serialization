@@ -1,0 +1,14 @@
+//Схема сообщения
+namespace Schema;
+
+table Message
+{
+    type:short; //Тип схемы
+    key:string; //Ключ
+    user_addressee_id:ulong;
+    user_sender_id:ulong;
+    message:string;
+    date_time:string; //Время отправки
+}
+
+root_type Message;

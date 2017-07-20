@@ -14,10 +14,10 @@ struct Profile FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_TYPE = 4,
     VT_KEY = 6,
-    VT_USER_ADDRESSEE_ID = 8,
-    VT_USER_SENDER_ID = 10,
-    VT_MESSAGE = 12,
-    VT_DATE_TIME = 14
+    VT_NAME = 8,
+    VT_SURNAME = 10,
+    VT_SEX = 12,
+    VT_DATA_OF_BIRTH = 14
   };
   int16_t type() const {
     return GetField<int16_t>(VT_TYPE, 0);
@@ -25,29 +25,30 @@ struct Profile FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::String *key() const {
     return GetPointer<const flatbuffers::String *>(VT_KEY);
   }
-  uint64_t user_addressee_id() const {
-    return GetField<uint64_t>(VT_USER_ADDRESSEE_ID, 0);
+  const flatbuffers::String *name() const {
+    return GetPointer<const flatbuffers::String *>(VT_NAME);
   }
-  uint64_t user_sender_id() const {
-    return GetField<uint64_t>(VT_USER_SENDER_ID, 0);
+  const flatbuffers::String *surname() const {
+    return GetPointer<const flatbuffers::String *>(VT_SURNAME);
   }
-  const flatbuffers::String *message() const {
-    return GetPointer<const flatbuffers::String *>(VT_MESSAGE);
+  bool sex() const {
+    return GetField<uint8_t>(VT_SEX, 0) != 0;
   }
-  const flatbuffers::String *date_time() const {
-    return GetPointer<const flatbuffers::String *>(VT_DATE_TIME);
+  const flatbuffers::String *data_of_birth() const {
+    return GetPointer<const flatbuffers::String *>(VT_DATA_OF_BIRTH);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int16_t>(verifier, VT_TYPE) &&
            VerifyOffset(verifier, VT_KEY) &&
            verifier.Verify(key()) &&
-           VerifyField<uint64_t>(verifier, VT_USER_ADDRESSEE_ID) &&
-           VerifyField<uint64_t>(verifier, VT_USER_SENDER_ID) &&
-           VerifyOffset(verifier, VT_MESSAGE) &&
-           verifier.Verify(message()) &&
-           VerifyOffset(verifier, VT_DATE_TIME) &&
-           verifier.Verify(date_time()) &&
+           VerifyOffset(verifier, VT_NAME) &&
+           verifier.Verify(name()) &&
+           VerifyOffset(verifier, VT_SURNAME) &&
+           verifier.Verify(surname()) &&
+           VerifyField<uint8_t>(verifier, VT_SEX) &&
+           VerifyOffset(verifier, VT_DATA_OF_BIRTH) &&
+           verifier.Verify(data_of_birth()) &&
            verifier.EndTable();
   }
 };
@@ -61,17 +62,17 @@ struct ProfileBuilder {
   void add_key(flatbuffers::Offset<flatbuffers::String> key) {
     fbb_.AddOffset(Profile::VT_KEY, key);
   }
-  void add_user_addressee_id(uint64_t user_addressee_id) {
-    fbb_.AddElement<uint64_t>(Profile::VT_USER_ADDRESSEE_ID, user_addressee_id, 0);
+  void add_name(flatbuffers::Offset<flatbuffers::String> name) {
+    fbb_.AddOffset(Profile::VT_NAME, name);
   }
-  void add_user_sender_id(uint64_t user_sender_id) {
-    fbb_.AddElement<uint64_t>(Profile::VT_USER_SENDER_ID, user_sender_id, 0);
+  void add_surname(flatbuffers::Offset<flatbuffers::String> surname) {
+    fbb_.AddOffset(Profile::VT_SURNAME, surname);
   }
-  void add_message(flatbuffers::Offset<flatbuffers::String> message) {
-    fbb_.AddOffset(Profile::VT_MESSAGE, message);
+  void add_sex(bool sex) {
+    fbb_.AddElement<uint8_t>(Profile::VT_SEX, static_cast<uint8_t>(sex), 0);
   }
-  void add_date_time(flatbuffers::Offset<flatbuffers::String> date_time) {
-    fbb_.AddOffset(Profile::VT_DATE_TIME, date_time);
+  void add_data_of_birth(flatbuffers::Offset<flatbuffers::String> data_of_birth) {
+    fbb_.AddOffset(Profile::VT_DATA_OF_BIRTH, data_of_birth);
   }
   ProfileBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
@@ -89,17 +90,17 @@ inline flatbuffers::Offset<Profile> CreateProfile(
     flatbuffers::FlatBufferBuilder &_fbb,
     int16_t type = 0,
     flatbuffers::Offset<flatbuffers::String> key = 0,
-    uint64_t user_addressee_id = 0,
-    uint64_t user_sender_id = 0,
-    flatbuffers::Offset<flatbuffers::String> message = 0,
-    flatbuffers::Offset<flatbuffers::String> date_time = 0) {
+    flatbuffers::Offset<flatbuffers::String> name = 0,
+    flatbuffers::Offset<flatbuffers::String> surname = 0,
+    bool sex = false,
+    flatbuffers::Offset<flatbuffers::String> data_of_birth = 0) {
   ProfileBuilder builder_(_fbb);
-  builder_.add_user_sender_id(user_sender_id);
-  builder_.add_user_addressee_id(user_addressee_id);
-  builder_.add_date_time(date_time);
-  builder_.add_message(message);
+  builder_.add_data_of_birth(data_of_birth);
+  builder_.add_surname(surname);
+  builder_.add_name(name);
   builder_.add_key(key);
   builder_.add_type(type);
+  builder_.add_sex(sex);
   return builder_.Finish();
 }
 
@@ -107,18 +108,18 @@ inline flatbuffers::Offset<Profile> CreateProfileDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     int16_t type = 0,
     const char *key = nullptr,
-    uint64_t user_addressee_id = 0,
-    uint64_t user_sender_id = 0,
-    const char *message = nullptr,
-    const char *date_time = nullptr) {
+    const char *name = nullptr,
+    const char *surname = nullptr,
+    bool sex = false,
+    const char *data_of_birth = nullptr) {
   return Schema::CreateProfile(
       _fbb,
       type,
       key ? _fbb.CreateString(key) : 0,
-      user_addressee_id,
-      user_sender_id,
-      message ? _fbb.CreateString(message) : 0,
-      date_time ? _fbb.CreateString(date_time) : 0);
+      name ? _fbb.CreateString(name) : 0,
+      surname ? _fbb.CreateString(surname) : 0,
+      sex,
+      data_of_birth ? _fbb.CreateString(data_of_birth) : 0);
 }
 
 inline const Schema::Profile *GetProfile(const void *buf) {
