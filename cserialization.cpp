@@ -157,12 +157,11 @@ void CSerialization::deserialization(const std::string &PASSED_FILE)
     {
         std::cout << conteier[i] << std::endl;
     }*/
-    std::cout << for_type->type() << std::endl;
 //    switch (for_type->type())
 //    {
 //    case 0:
 //        //Десериализация файла
-//        //auto take = GetRegistration(data.get());
+//        auto take = GetRegistration(data.get());
 //        printf("%s\n", take->login()->c_str());
 //        printf("%s\n", take->password()->c_str());
 //        printf("%s\n", take->name()->c_str());
@@ -199,6 +198,52 @@ void CSerialization::deserialization(const std::string &PASSED_FILE)
 //    default:
 //        break;
 //    }
+    if(for_type->type() == 0)
+    {
+                //Десериализация файла
+                auto take = GetRegistration(data.get());
+                printf("%s\n", take->login()->c_str());
+                printf("%s\n", take->password()->c_str());
+                printf("%s\n", take->name()->c_str());
+                printf("%s\n", take->surname()->c_str());
+                printf("%s\n", take->sex() ? "true" : "false");
+                printf("%s\n", take->date_of_birth()->c_str());
+    }
+    else if(for_type->type() == 1)
+    {
+                //Десериализация файла
+                auto take = GetSignIn(data.get());
+                printf("%s\n", take->login()->c_str());
+                printf("%s\n", take->password()->c_str());
+    }
+    else if(for_type->type() == 2)
+    {
+                //Десериализация файла
+                auto take = GetProfile(data.get());
+                printf("%s\n", take->key()->c_str());
+                printf("%s\n", take->name()->c_str());
+                printf("%s\n", take->surname()->c_str());
+                printf("%s\n", take->sex() ? "true" : "false");
+                printf("%s\n", take->data_of_birth()->c_str());
+    }
+    else if(for_type->type() == 3)
+    {
+                //Десериализация файла
+                auto take = GetMessage(data.get());
+                printf("%s\n", take->key()->c_str());
+                printf("%llu\n", take->user_addressee_id());
+                printf("%llu\n", take->user_sender_id());
+                printf("%s\n", take->message()->c_str());
+    }
+    else if(for_type->type() == 4)
+    {
+        //Десериализация файла
+        auto take = GetError(data.get());
+        printf("%s\n", take->key()->c_str());
+        printf("%d\n", take->code());
+        printf("%s\n", take->description()->c_str());
+
+    }
     std::cout << "-------------------------" <<  std::endl;
 
 }

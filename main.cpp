@@ -14,7 +14,9 @@ int main()
     ser->deserialization(str);
     ser->serialization(str, "124nfsdhk312415", "Ilyas", "Eredz", true, "10.03.96"); // Профиль
     ser->deserialization(str);
-    ser->serialization(str, "", "Ilyas", "Eredz", true, "10.03.96"); // Сообщение
+    ser->serialization(str, "123asfasf123a", 124141251, 509250292, "Helo, this is test message!" ,"10.03.96"); // Сообщение
+    ser->deserialization(str);
+    ser->serialization(str, "12adsdaw1", 407, "Unknown error!");
     ser->deserialization(str);
 
     return 0;

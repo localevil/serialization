@@ -10,8 +10,9 @@ DISTFILES += \
     schema.fbs \
     Registration.fbs \
     SignIn.fbs \
-    Profile.fbs \
-    Error.fbs
+    Error.fbs \
+    Message.fbs \
+    Profile.fbs
 
 HEADERS += \
     schema_generated.h \
@@ -43,4 +44,5 @@ HEADERS += \
     Error_generated.h \
     Profile_generated.h \
     Registration_generated.h \
-    SignIn_generated.h
+    SignIn_generated.h \
+    Message_generated.h
