@@ -10,108 +10,87 @@ CSerialization::~CSerialization()
 
 }
 
-enum type{
-    strcISTRATION = 0,
-    SINGIN,
-    PROFILE,
-    MESSAGE,
-    ERROR
-};
-
-bool CSerialization::serialization(const std::string &passed_file, std::string passed_login, std::string passed_password,
-                                   std::string passed_name, std::string passed_surname, bool passed_sex,
-                                   std::string passed_data_of_birth) //Регистрация
+bool CSerialization::serialization(const std::string &passed_file,const std::vector<std::variant<std::string,
+                                   unsigned long, bool, int>> &passedVariant, Type typeOfSchema)
 {
-    //Создание и присваивание значений элементов структуры из schema_generated.h
+    switch (typeOfSchema) {
+    case REGISTRATION:
+        auto struct_login = builder->CreateString(passedVariant[1]);
+        auto struct_password = builder->CreateString(passedVariant[2]);
+        auto struct_name = builder->CreateString(passedVariant[3]);
+        auto struct_surname = builder->CreateString(passedVariant[4]);
+        bool struct_sex = passedVariant[5];
+        auto struct_data_of_birth = builder->CreateString(passedVariant[6]);
 
-    auto struct_login = builder->CreateString(passed_login);
-    auto struct_password = builder->CreateString(passed_password);
-    auto struct_name = builder->CreateString(passed_name);
-    auto struct_surname = builder->CreateString(passed_surname);
-    bool struct_sex = passed_sex;
-    auto struct_data_of_birth = builder->CreateString(passed_data_of_birth);
+        //Создание экземпляра структуры с использованием элементов
+        auto strc = CreateRegistration(*builder, 0, struct_login, struct_password, struct_name, struct_surname,
+                                       struct_sex, struct_data_of_birth);
 
-    //Создание экземпляра структуры с использованием элементов
-    auto strc = CreateRegistration(*builder, 0, struct_login, struct_password, struct_name, struct_surname,
-                                   struct_sex, struct_data_of_birth);
+        //Завершение построения структуры
+        builder->Finish(strc);
 
-    //Завершение построения структуры
-    builder->Finish(strc);
+        save_to_file(passed_file);
 
-    save_to_file(passed_file);
+        break;
+    case SIGNIN:
+        auto struct_login = builder->CreateString(passedVariant[1]);
+        auto struct_password = builder->CreateString(passedVariant[2]);
 
-    return true;
-}
-bool CSerialization::serialization(const std::string &passed_file, const std::string &passed_login, const std::string &passed_password) // Вход
-{
-    auto struct_login = builder->CreateString(passed_login);
-    auto struct_password = builder->CreateString(passed_password);
+        //Создание экземпляра структуры с использованием элементов
+        auto strc = CreateSignIn(*builder, 1, struct_login, struct_password);
 
-    //Создание экземпляра структуры с использованием элементов
-    auto strc = CreateSignIn(*builder, 1, struct_login, struct_password);
+        //Завершение построения структуры
+        builder->Finish(strc);
 
-    //Завершение построения структуры
-    builder->Finish(strc);
+        save_to_file(passed_file);
+        break;
+    /*case PROFILE:
+        auto struct_key = builder->CreateString(passed_key);
+        auto struct_name = builder->CreateString(passed_name);
+        auto struct_surname = builder->CreateString(passed_surname);
+        bool struct_sex = passed_sex;
+        auto struct_data_of_birth = builder->CreateString(passed_data_of_birth);
 
-    save_to_file(passed_file);
+        //Создание экземпляра структуры с использованием элементов
+        auto strc = CreateProfile(*builder, 2, struct_key, struct_name, struct_surname, struct_sex, struct_data_of_birth);
 
-    return true;
-}
+        //Завершение построения структуры
+        builder->Finish(strc);
 
-bool CSerialization::serialization(const std::string &passed_file, const std::string &passed_key, const std::string &passed_name,
-                                  const std::string &passed_surname, const bool &passed_sex, const std::string &passed_data_of_birth) // Профиль
-{
-    auto struct_key = builder->CreateString(passed_key);
-    auto struct_name = builder->CreateString(passed_name);
-    auto struct_surname = builder->CreateString(passed_surname);
-    bool struct_sex = passed_sex;
-    auto struct_data_of_birth = builder->CreateString(passed_data_of_birth);
+        save_to_file(passed_file);
+        break;
+    case MESSAGE:
+        auto struct_key = builder->CreateString(passed_key);
+        unsigned long struct_user_addressee_id = passed_user_addressee_id;
+        unsigned long struct_user_sender_id = passed_user_sender_id;
+        auto struct_message = builder->CreateString(passed_message);
+        auto struct_data_time = builder->CreateString(passed_data_time);
 
-    //Создание экземпляра структуры с использованием элементов
-    auto strc = CreateProfile(*builder, 2, struct_key, struct_name, struct_surname, struct_sex, struct_data_of_birth);
+        //Создание экземпляра структуры с использованием элементов
+        auto strc = CreateMessage(*builder, 3, struct_key, struct_user_addressee_id, struct_user_sender_id, struct_message,
+                                  struct_data_time);
 
-    //Завершение построения структуры
-    builder->Finish(strc);
+        //Завершение построения структуры
+        builder->Finish(strc);
 
-    save_to_file(passed_file);
-    return true;
-}
+        save_to_file(passed_file);
+        break;
+    case ERROR:
+        auto struct_key = builder->CreateString(passed_key);
+        int16_t struct_code = passed_code;
+        auto struct_discriprion = builder->CreateString(passed_discriprion);
 
-bool CSerialization::serialization(const std::string &passed_file, const std::string &passed_key, const unsigned long &passed_user_addressee_id,
-                                   const unsigned long &passed_user_sender_id, const std::string &passed_message,
-                                   const std::string &passed_data_time) // Сообщение
-{
-    auto struct_key = builder->CreateString(passed_key);
-    unsigned long struct_user_addressee_id = passed_user_addressee_id;
-    unsigned long struct_user_sender_id = passed_user_sender_id;
-    auto struct_message = builder->CreateString(passed_message);
-    auto struct_data_time = builder->CreateString(passed_data_time);
+        //Создание экземпляра структуры с использованием элементов
+        auto strc = CreateError(*builder, 4, struct_key, struct_code, struct_discriprion);
 
-    //Создание экземпляра структуры с использованием элементов
-    auto strc = CreateMessage(*builder, 3, struct_key, struct_user_addressee_id, struct_user_sender_id, struct_message, struct_data_time);
+        //Завершение построения структуры
+        builder->Finish(strc);
 
-    //Завершение построения структуры
-    builder->Finish(strc);
-
-    save_to_file(passed_file);
-
-    return true;
-}
-
-
-bool CSerialization::serialization(const std::string &passed_file, const std::string &passed_key, const int16_t &passed_code, const std::string &passed_discriprion) // Ошибка
-{
-    auto struct_key = builder->CreateString(passed_key);
-    int16_t struct_code = passed_code;
-    auto struct_discriprion = builder->CreateString(passed_discriprion);
-
-    //Создание экземпляра структуры с использованием элементов
-    auto strc = CreateError(*builder, 4, struct_key, struct_code, struct_discriprion);
-
-    //Завершение построения структуры
-    builder->Finish(strc);
-
-    save_to_file(passed_file);
+        save_to_file(passed_file);
+        break;*/
+    default:
+        break;
+    }
 
     return true;
 }

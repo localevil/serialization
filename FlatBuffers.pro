@@ -12,7 +12,13 @@ DISTFILES += \
     SignIn.fbs \
     Error.fbs \
     Message.fbs \
-    Profile.fbs
+    Profile.fbs \
+    Схемы/Error.fbs \
+    Схемы/Message.fbs \
+    Схемы/Profile.fbs \
+    Схемы/Registration.fbs \
+    Схемы/schema.fbs \
+    Схемы/SignIn.fbs
 
 HEADERS += \
     schema_generated.h \
@@ -45,4 +51,16 @@ HEADERS += \
     Profile_generated.h \
     Registration_generated.h \
     SignIn_generated.h \
-    Message_generated.h
+    Message_generated.h \
+    Сгенерированные схемы/Error_generated.h \
+    Сгенерированные схемы/Message_generated.h \
+    Сгенерированные схемы/Profile_generated.h \
+    Сгенерированные схемы/Registration_generated.h \
+    Сгенерированные схемы/schema_generated.h \
+    Сгенерированные схемы/SignIn_generated.h \
+    Сгенерированные схемы/Error_generated.h \
+    Сгенерированные схемы/Message_generated.h \
+    Сгенерированные схемы/Profile_generated.h \
+    Сгенерированные схемы/Registration_generated.h \
+    Сгенерированные схемы/schema_generated.h \
+    Сгенерированные схемы/SignIn_generated.h

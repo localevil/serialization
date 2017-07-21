@@ -8,21 +8,17 @@ int main()
 
     std::unique_ptr<CSerialization> ser = std::make_unique<CSerialization>();
 
-    ser->serialization(str, "log", "passwd", "Ilyas", "Eredzh", true, "10.03.96"); //Регистрация
-    ser->deserialization(str);
+    std::vector<std::variant<std::string, unsigned long, bool, int>> testVector;
+    testVector.push_back(0);
+    testVector.push_back("root");
+    testVector.push_back("passwd");
+    testVector.push_back("Ilyas");
+    testVector.push_back("Eredz");
+    testVector.push_back(bool(true));
+    testVector.push_back("10.03.96");
 
-    ser->serialization(str, "log", "passwd"); //Вход
+    ser->serialization(str, testVector, Type::REGISTRATION);
     ser->deserialization(str);
-
-    ser->serialization(str, "124nfsdhk312415", "Ilyas", "Eredz", true, "10.03.96"); // Профиль
-    ser->deserialization(str);
-
-    ser->serialization(str, "123asfasf123a", 124141251, 509250292, "Helo, this is test message!" ,"10.03.96"); // Сообщение
-    ser->deserialization(str);
-
-    ser->serialization(str, "12adsdaw1", 407, "Unknown error!");
-    ser->deserialization(str);
-
     ser->deserialization("two.bin"); //Проверка файла
 
     return 0;
